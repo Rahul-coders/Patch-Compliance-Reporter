@@ -9,6 +9,8 @@ import com.internship.tool.dto.EmployeeDTO;
 import com.internship.tool.entity.Employee;
 import com.internship.tool.service.EmployeeService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/employees")
 public class EmployeeController {
@@ -17,8 +19,8 @@ public class EmployeeController {
     private EmployeeService employeeService;
 
     @PostMapping
-    public Employee saveEmployee(@RequestBody Employee employee) {
-        return employeeService.saveEmployee(employee);
+    public Employee saveEmployee(@Valid @RequestBody Employee employee) {
+    return employeeService.saveEmployee(employee);
     }
 
     @GetMapping
@@ -33,8 +35,8 @@ public class EmployeeController {
 
     @PutMapping("/{id}")
     public Employee updateEmployee(@PathVariable Long id,
-                                   @RequestBody Employee employee) {
-        return employeeService.updateEmployee(id, employee);
+                               @Valid @RequestBody Employee employee) {
+    return employeeService.updateEmployee(id, employee);
     }
 
     @DeleteMapping("/{id}")
