@@ -1,14 +1,12 @@
 package com.internship.tool.controller;
-
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
 import com.internship.tool.dto.EmployeeDTO;
 import com.internship.tool.entity.Employee;
 import com.internship.tool.service.EmployeeService;
-
 import jakarta.validation.Valid;
 
 @RestController
@@ -19,18 +17,41 @@ public class EmployeeController {
     private EmployeeService employeeService;
 
     @PostMapping
-    public Employee saveEmployee(@Valid @RequestBody Employee employee) {
-    return employeeService.saveEmployee(employee);
+    public ResponseEntity<Employee> saveEmployee(
+        @Valid @RequestBody Employee employee) {
+
+    Employee savedEmployee =
+            employeeService.saveEmployee(employee);
+
+    return new ResponseEntity<>(
+            savedEmployee,
+            HttpStatus.CREATED
+    );
     }
 
     @GetMapping
-    public List<Employee> getAllEmployees() {
-        return employeeService.getAllEmployees();
+    public ResponseEntity<List<Employee>> getAllEmployees() {
+
+    List<Employee> employees =
+            employeeService.getAllEmployees();
+
+    return new ResponseEntity<>(
+            employees,
+            HttpStatus.OK
+    );
     }
 
     @GetMapping("/{id}")
-    public Employee getEmployeeById(@PathVariable Long id) {
-        return employeeService.getEmployeeById(id);
+    public ResponseEntity<Employee> getEmployeeById(
+        @PathVariable Long id) {
+
+    Employee employee =
+            employeeService.getEmployeeById(id);
+
+    return new ResponseEntity<>(
+            employee,
+            HttpStatus.OK
+    );
     }
 
     @PutMapping("/{id}")
@@ -40,8 +61,15 @@ public class EmployeeController {
     }
 
     @DeleteMapping("/{id}")
-    public String deleteEmployee(@PathVariable Long id) {
-        return employeeService.deleteEmployee(id);
+    public ResponseEntity<String> deleteEmployee(
+        @PathVariable Long id) {
+
+    employeeService.deleteEmployee(id);
+
+    return new ResponseEntity<>(
+            "Employee deleted successfully",
+            HttpStatus.OK
+    );
     }
 
     @GetMapping("/dto/{id}")
