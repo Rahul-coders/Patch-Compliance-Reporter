@@ -8,6 +8,7 @@ import com.internship.tool.dto.EmployeeDTO;
 import com.internship.tool.entity.Employee;
 import com.internship.tool.service.EmployeeService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
 
 @RestController
 @RequestMapping("/employees")
@@ -87,5 +88,12 @@ public ResponseEntity<List<Employee>> getEmployeesByDepartment(
             employees,
             HttpStatus.OK
     );
+    }
+    @GetMapping("/pagination")
+    public Page<Employee> getEmployeesWithPagination(
+        @RequestParam int page,
+        @RequestParam int size) {
+
+    return employeeService.getEmployeesWithPagination(page, size);
     }
 }

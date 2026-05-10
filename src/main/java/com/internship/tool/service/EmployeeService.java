@@ -15,13 +15,15 @@ public interface EmployeeService {
 
     String deleteEmployee(Long id);
 
-    Page<Employee> getEmployeesWithPagination(int page, int size);
+    
 
     List<Employee> getEmployeesSortedByName();
 
     List<Employee> getEmployeesSortedBySalaryDesc();
 
     EmployeeDTO getEmployeeDTO(Long id);
-    
+
     List<Employee> getEmployeesByDepartment(String department);
+
+    Page<Employee> getEmployeesWithPagination(int page, int size);
 }
