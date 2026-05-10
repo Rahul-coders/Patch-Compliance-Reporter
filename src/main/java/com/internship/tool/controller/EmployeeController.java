@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.data.domain.Page;
+import com.internship.tool.dto.EmployeeDTO;
 @RestController
 @RequestMapping("/employees")
 public class EmployeeController {
@@ -55,4 +56,24 @@ public class EmployeeController {
 
     return employeeService.getEmployeesWithPagination(page, size);
     }
+    @GetMapping("/employees/sort/name")
+    public List<Employee> getEmployeesSortedByName() {
+
+    return employeeService.getEmployeesSortedByName();
+    }
+    
+    @GetMapping("/dto/{id}")
+    public EmployeeDTO getEmployeeDTO(@PathVariable Long id) {
+
+    Employee employee = employeeService.getEmployeeById(id);
+
+    EmployeeDTO dto = new EmployeeDTO();
+
+    dto.setId(employee.getId());
+    dto.setName(employee.getName());
+    dto.setEmail(employee.getEmail());
+
+    return dto;
+    }
+
 }

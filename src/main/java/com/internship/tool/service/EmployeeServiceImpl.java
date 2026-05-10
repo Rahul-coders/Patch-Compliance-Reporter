@@ -1,89 +1,93 @@
 package com.internship.tool.service;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import com.internship.tool.entity.Employee;
-import com.internship.tool.repository.EmployeeRepository;
-import java.util.Optional;
+
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.internship.tool.exception.ResourceNotFoundException;
-import java.util.List;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+
+import com.internship.tool.dto.EmployeeDTO;
+import com.internship.tool.entity.Employee;
+import com.internship.tool.repository.EmployeeRepository;
+
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
-    private static final Logger logger =
-    LoggerFactory.getLogger(EmployeeServiceImpl.class);
-    @Autowired
-    private EmployeeRepository repository;
 
-    @Override
+    @Autowired
+    private EmployeeRepository employeeRepository;
+
+    
     public Employee saveEmployee(Employee employee) {
-        logger.info("Saving employee: {}", employee.getName());
-        return repository.save(employee);
+        return employeeRepository.save(employee);
     }
 
     @Override
     public List<Employee> getAllEmployees() {
-    logger.info("Fetching all employees");
-        return repository.findAll();
+        return employeeRepository.findAll();
     }
 
     @Override
     public Employee getEmployeeById(Long id) {
-
-    Optional<Employee> optionalEmployee = repository.findById(id);
-
-    if(optionalEmployee.isPresent()) {
-        return optionalEmployee.get();
-    } else {
-        throw new ResourceNotFoundException("Employee not found with id: " + id);
-    }
+        return employeeRepository.findById(id).orElse(null);
     }
 
     @Override
     public Employee updateEmployee(Long id, Employee employee) {
 
-        Employee existingEmployee =
-                repository.findById(id).orElse(null);
+        Employee existingEmployee = employeeRepository.findById(id).orElse(null);
 
         if (existingEmployee != null) {
-
             existingEmployee.setName(employee.getName());
-            existingEmployee.setDepartment(employee.getDepartment());
-            existingEmployee.setSalary(employee.getSalary());
+            existingEmployee.setEmail(employee.getEmail());
 
-            return repository.save(existingEmployee);
+            return employeeRepository.save(existingEmployee);
         }
 
         return null;
     }
 
-
     @Override
     public String deleteEmployee(Long id) {
-
-    Employee employee = repository.findById(id)
-            .orElseThrow(() ->
-                    new ResourceNotFoundException("Employee not found with id: " + id));
-
-    repository.delete(employee);
-
-    return "Employee deleted successfully";
+        employeeRepository.deleteById(id);
+        return "Employee deleted successfully";
     }
-}   public class EmployeeServiceImpl implements EmployeeService {
 
-    // existing methods
+    
+    public EmployeeDTO getEmployeeDTO(Long id) {
 
+        Employee employee = employeeRepository.findById(id).orElse(null);
+
+        if (employee == null) {
+            return null;
+        }
+
+        EmployeeDTO dto = new EmployeeDTO();
+
+        dto.setId(employee.getId());
+        dto.setName(employee.getName());
+        dto.setEmail(employee.getEmail());
+
+        return dto;
+    }
     @Override
-    public Page<Employee> getEmployeesWithPagination(int page, int size) {
-
-        logger.info("Fetching employees with pagination");
-
-        Pageable pageable = PageRequest.of(page, size);
-
-        return repository.findAll(pageable);
+    public List<Employee> getEmployeesSortedBySalaryDesc() {
+    return employeeRepository.findAll()
+            .stream()
+            .sorted((e1, e2) -> Double.compare(e2.getSalary(), e1.getSalary()))
+            .toList();
     }
+    @Override
+    public List<Employee> getEmployeesSortedByName() {
+    return employeeRepository.findAll()
+            .stream()
+            .sorted((e1, e2) -> e1.getName().compareTo(e2.getName()))
+            .toList();
+    }
+    @Override
+    public org.springframework.data.domain.Page<Employee> getEmployeesWithPagination(int page, int size) {
 
+    org.springframework.data.domain.Pageable pageable =
+            org.springframework.data.domain.PageRequest.of(page, size);
+
+    return employeeRepository.findAll(pageable);
+    }
 }
