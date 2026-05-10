@@ -5,14 +5,9 @@ public class EmployeeDTO {
     private Long id;
     private String name;
     private String email;
+    private double salary;
 
     public EmployeeDTO() {
-    }
-
-    public EmployeeDTO(Long id, String name, String email) {
-        this.id = id;
-        this.name = name;
-        this.email = email;
     }
 
     public Long getId() {
@@ -37,5 +32,13 @@ public class EmployeeDTO {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public double getSalary() {
+        return salary;
+    }
+
+    public void setSalary(double salary) {
+        this.salary = salary;
     }
 }

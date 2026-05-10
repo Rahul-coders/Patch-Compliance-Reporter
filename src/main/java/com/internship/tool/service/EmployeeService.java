@@ -1,5 +1,5 @@
 package com.internship.tool.service;
-
+import com.internship.tool.dto.EmployeeDTO;
 import com.internship.tool.entity.Employee;
 import java.util.List;
 import org.springframework.data.domain.Page;
@@ -20,4 +20,6 @@ public interface EmployeeService {
     List<Employee> getEmployeesSortedByName();
 
     List<Employee> getEmployeesSortedBySalaryDesc();
+
+    EmployeeDTO getEmployeeDTO(Long id);
 }

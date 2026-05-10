@@ -15,7 +15,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Autowired
     private EmployeeRepository employeeRepository;
 
-    
+    @Override
     public Employee saveEmployee(Employee employee) {
         return employeeRepository.save(employee);
     }
@@ -32,12 +32,12 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public Employee updateEmployee(Long id, Employee employee) {
-
         Employee existingEmployee = employeeRepository.findById(id).orElse(null);
 
         if (existingEmployee != null) {
             existingEmployee.setName(employee.getName());
             existingEmployee.setEmail(employee.getEmail());
+            existingEmployee.setSalary(employee.getSalary());
 
             return employeeRepository.save(existingEmployee);
         }
@@ -51,7 +51,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         return "Employee deleted successfully";
     }
 
-    
+    @Override
     public EmployeeDTO getEmployeeDTO(Long id) {
 
         Employee employee = employeeRepository.findById(id).orElse(null);
@@ -65,29 +65,8 @@ public class EmployeeServiceImpl implements EmployeeService {
         dto.setId(employee.getId());
         dto.setName(employee.getName());
         dto.setEmail(employee.getEmail());
+        dto.setSalary(employee.getSalary());
 
         return dto;
-    }
-    @Override
-    public List<Employee> getEmployeesSortedBySalaryDesc() {
-    return employeeRepository.findAll()
-            .stream()
-            .sorted((e1, e2) -> Double.compare(e2.getSalary(), e1.getSalary()))
-            .toList();
-    }
-    @Override
-    public List<Employee> getEmployeesSortedByName() {
-    return employeeRepository.findAll()
-            .stream()
-            .sorted((e1, e2) -> e1.getName().compareTo(e2.getName()))
-            .toList();
-    }
-    @Override
-    public org.springframework.data.domain.Page<Employee> getEmployeesWithPagination(int page, int size) {
-
-    org.springframework.data.domain.Pageable pageable =
-            org.springframework.data.domain.PageRequest.of(page, size);
-
-    return employeeRepository.findAll(pageable);
     }
 }
