@@ -95,5 +95,14 @@ public ResponseEntity<List<Employee>> getEmployeesByDepartment(
         @RequestParam int size) {
 
     return employeeService.getEmployeesWithPagination(page, size);
+    }@GetMapping("/sort/name")
+    public List<Employee> sortByName() {
+    return employeeService.getEmployeesSortedByName();
     }
+
+    @GetMapping("/sort/salary")
+    public List<Employee> sortBySalaryDesc() {
+    return employeeService.getEmployeesSortedBySalaryDesc();
+    }
+
 }

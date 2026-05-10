@@ -9,7 +9,7 @@ import org.springframework.data.domain.PageRequest;
 import com.internship.tool.dto.EmployeeDTO;
 import com.internship.tool.entity.Employee;
 import com.internship.tool.repository.EmployeeRepository;
-
+import org.springframework.data.domain.Sort;
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
 
@@ -78,5 +78,14 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public Page<Employee> getEmployeesWithPagination(int page, int size) {
     return employeeRepository.findAll(PageRequest.of(page, size));
+    }@Override
+    public List<Employee> getEmployeesSortedByName() {
+    return employeeRepository.findAll(Sort.by("name"));
+    }
+
+    @Override
+    public List<Employee> getEmployeesSortedBySalaryDesc() {
+    return employeeRepository.findAll(
+            Sort.by(Sort.Direction.DESC, "salary"));
     }
 }
