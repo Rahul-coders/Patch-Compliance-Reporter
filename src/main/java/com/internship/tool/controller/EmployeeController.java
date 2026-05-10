@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import org.springframework.http.ResponseEntity;
+import org.springframework.data.domain.Page;
 @RestController
 @RequestMapping("/employees")
 public class EmployeeController {
@@ -46,5 +47,12 @@ public class EmployeeController {
     public String deleteEmployee(@PathVariable Long id) {
 
         return employeeService.deleteEmployee(id);
+    }
+    @GetMapping("/employees/page")
+    public Page<Employee> getEmployeesWithPagination(
+        @RequestParam int page,
+        @RequestParam int size) {
+
+    return employeeService.getEmployeesWithPagination(page, size);
     }
 }

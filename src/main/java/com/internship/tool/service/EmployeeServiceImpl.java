@@ -8,7 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.internship.tool.exception.ResourceNotFoundException;
 import java.util.List;
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
     private static final Logger logger =
@@ -70,4 +72,18 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     return "Employee deleted successfully";
     }
+}   public class EmployeeServiceImpl implements EmployeeService {
+
+    // existing methods
+
+    @Override
+    public Page<Employee> getEmployeesWithPagination(int page, int size) {
+
+        logger.info("Fetching employees with pagination");
+
+        Pageable pageable = PageRequest.of(page, size);
+
+        return repository.findAll(pageable);
+    }
+
 }
