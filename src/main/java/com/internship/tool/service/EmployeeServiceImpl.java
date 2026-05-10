@@ -3,10 +3,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.internship.tool.entity.Employee;
 import com.internship.tool.repository.EmployeeRepository;
-
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import com.internship.tool.exception.ResourceNotFoundException;
 import java.util.List;
 
 @Service
@@ -24,14 +24,20 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public List<Employee> getAllEmployees() {
-    logger.info("Fetching employee with id: {}", id);
+    logger.info("Fetching all employees");
         return repository.findAll();
     }
 
     @Override
     public Employee getEmployeeById(Long id) {
 
-        return repository.findById(id).orElse(null);
+    Optional<Employee> optionalEmployee = repository.findById(id);
+
+    if(optionalEmployee.isPresent()) {
+        return optionalEmployee.get();
+    } else {
+        throw new ResourceNotFoundException("Employee not found with id: " + id);
+    }
     }
 
     @Override
@@ -52,11 +58,16 @@ public class EmployeeServiceImpl implements EmployeeService {
         return null;
     }
 
+
     @Override
     public String deleteEmployee(Long id) {
-        logger.info("Deleting employee with id: {}", id);
-        repository.deleteById(id);
 
-        return "Employee deleted successfully";
+    Employee employee = repository.findById(id)
+            .orElseThrow(() ->
+                    new ResourceNotFoundException("Employee not found with id: " + id));
+
+    repository.delete(employee);
+
+    return "Employee deleted successfully";
     }
 }
