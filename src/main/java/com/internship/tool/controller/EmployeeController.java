@@ -5,6 +5,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import org.springframework.http.ResponseEntity;
 @RestController
 @RequestMapping("/employees")
 public class EmployeeController {
@@ -14,23 +15,22 @@ public class EmployeeController {
 
     // SAVE Employee
     @PostMapping
-    public Employee saveEmployee(@Valid @RequestBody Employee employee) {
-
-        return employeeService.saveEmployee(employee);
+    public ResponseEntity<Employee> saveEmployee(@Valid @RequestBody Employee employee){
+        return ResponseEntity.ok(employeeService.saveEmployee(employee));
     }
 
     // GET ALL Employees
     @GetMapping
-    public List<Employee> getAllEmployees() {
+    public ResponseEntity<List<Employee>> getAllEmployees() {
 
-        return employeeService.getAllEmployees();
+        return ResponseEntity.ok(employeeService.getAllEmployees());
     }
 
     // GET Employee By ID
     @GetMapping("/{id}")
-    public Employee getEmployeeById(@PathVariable Long id) {
+    public ResponseEntity<Employee> getEmployeeById(@PathVariable Long id){
 
-        return employeeService.getEmployeeById(id);
+        return ResponseEntity.ok(employeeService.getEmployeeById(id));
     }
 
     // UPDATE Employee
