@@ -22,4 +22,6 @@ public interface EmployeeService {
     List<Employee> getEmployeesSortedBySalaryDesc();
 
     EmployeeDTO getEmployeeDTO(Long id);
+    
+    List<Employee> getEmployeesByDepartment(String department);
 }

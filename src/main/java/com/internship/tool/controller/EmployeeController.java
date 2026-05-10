@@ -76,4 +76,16 @@ public class EmployeeController {
     public EmployeeDTO getEmployeeDTO(@PathVariable Long id) {
         return employeeService.getEmployeeDTO(id);
     }
+    @GetMapping("/search")
+public ResponseEntity<List<Employee>> getEmployeesByDepartment(
+        @RequestParam String department) {
+
+    List<Employee> employees =
+            employeeService.getEmployeesByDepartment(department);
+
+    return new ResponseEntity<>(
+            employees,
+            HttpStatus.OK
+    );
+    }
 }
